@@ -17,7 +17,7 @@ fn main() {
         let mut tmp: (String, String) = ("".to_string(), "".to_string());
         match selected_problem {
             0 => tmp = kagen_item(m, n, true),
-            //1 => tmp = kakezan_item(m, n),
+            1 => tmp = kakezan_item(m, n),
             _ => {},
         }
         v.push(tmp);
@@ -67,9 +67,27 @@ fn kagen_item(m: i32, n: i32, flag: bool) -> (String, String) {
 }
 
 // 掛け算問題1つを生成
-fn kakezan_item() -> (String, String) {
-    let res1: String = format!("");
-    let res2: String = format!("");
+fn kakezan_item(m: i32, n: i32) -> (String, String) {
+    let v1 = create_matrix_vec(m, n);
+    let v2 = create_matrix_vec(m, n);
+    let mut v3: Vec<Vec<i32>> = Vec::new();
+    for i in 0 .. m {
+        v3.push(Vec::new());
+        for j in 0 .. n {
+            let mut tmp: i32 = 0;
+            for k in 0 .. n {
+                tmp += v1[i as usize][k as usize] * v2[k as usize][j as usize];
+            }
+            v3[i as usize].push(tmp);
+        }
+    }
+
+    let mut v2_text = String::from("\\times");
+    let v1_text = matrix_to_string(v1.clone(), m, n);
+    v2_text += &matrix_to_string(v2.clone(), m, n);
+    let v3_text = matrix_to_string(v3.clone(), m, n);
+    let res1: String = format!("\\item $\\begin{{aligned}}\n{}{}\\end{{aligned}}$", v1_text, v2_text);
+    let res2: String = format!("\\item $\\begin{{aligned}}\n{}\\end{{aligned}}$", v3_text);
     (res1, res2)
 }
 
