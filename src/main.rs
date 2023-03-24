@@ -16,7 +16,14 @@ fn main() {
     for _i in 0..number_of_problem {
         let mut tmp: (String, String) = ("".to_string(), "".to_string());
         match selected_problem {
-            0 => tmp = kagen_item(m, n, true),
+            0 => {
+                let mut flag: bool = true;
+                let rnd = get_rand(0, 2);
+                if rnd == 1 {
+                    flag = false;
+                }
+                tmp = kagen_item(m, n, flag);
+            },
             1 => tmp = kakezan_item(m, n),
             _ => {},
         }
@@ -32,7 +39,7 @@ fn main() {
     }
 
     // texファイルに書き込み
-    write_tex("./q1.tex".to_string(), ques, ans, number_of_problem);
+    write_tex("./q1.tex".to_string(), ques, ans);
 }
 
 // 加減問題1つを生成
@@ -121,12 +128,12 @@ fn matrix_to_string(v: Vec<Vec<i32>>, m: i32, n: i32) -> String {
 
 // a以上b未満の乱数を取得
 fn get_rand(a: i32, b :i32) -> i32 {
-    let res: i32 = rand::thread_rng().gen_range(a, b-1);
+    let res: i32 = rand::thread_rng().gen_range(a, b);
     res
 }
 
 // texファイルに書き込み
-fn write_tex(path: String, ques: String, ans: String, number_of_problem: usize) {
+fn write_tex(path: String, ques: String, ans: String) {
        let mut file = File::create(path)
            .expect("file not found.");
         writeln!(file, "\\subsection*{{問題}}").expect("cannot write.");
